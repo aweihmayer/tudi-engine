@@ -1,0 +1,21 @@
+01-31-2020
+Remove collider and drawer wrapper objects & put shapes into core.objects.components package
+It is a waste to use wrappers them just to tell the handlers that objects are handleable instead of just using the Drawable and Collideable interface as intended
+Therefore we create the core.objects.shape package and its subpackages graphics and hitboxes
+
+BaseObject no longer has the parent. There should be a clear distinction between the components and the registry objects
+
+02-05-2020
+Create ComponentList class. GameObject (the main registry object) no longer extends a ComponentList class, but has a ComponentList property
+
+Remove UpdateEvent from Game class to the UpdateHandler where it actually is used / belongs
+
+02-13-2020
+Change ObjectReferenceList to GameRegistryList so that the object registry can have an instance of the list since it is essentially the same
+Before ObjectReferenceList held indexes to the array list in the object registry, now it can hold either depending on the type you pass.
+Reference list will no longer all be in the registry; each handler will keep track of its own reference list because it is their responsibility
+to do so anyway
+
+Main objects will now be added/removed immediately instead of waiting for the start of the next update phase. There is no need to mark
+objects as removed anymore, but to make sure no references break, I will set the registry index as -2 to indicate that they were once
+in the registry, but then removed
