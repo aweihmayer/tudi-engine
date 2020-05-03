@@ -1,12 +1,15 @@
 package core.registry;
 
-import java.util.ArrayList;
+import core.objects.main.GameObject;
 
-public class GameRegistryList<T> {
-	private ArrayList<T> list = 					new ArrayList<T>();
+import java.util.ArrayList;
+import java.util.List;
+
+public class GameRegistryList {
+	private ArrayList<GameObject> list = 			new ArrayList<GameObject>();
 	private ArrayList<Integer> availableIndexes = 	new ArrayList<Integer>();
 
-	public int add(T item) {
+	public int add(GameObject item) {
 		int i;
 
 		if(!this.availableIndexes.isEmpty()) {
@@ -24,7 +27,7 @@ public class GameRegistryList<T> {
 		return this.list.size();
 	}
 
-	public T get(int i) {
+	public GameObject get(int i) {
 		return this.list.get(i);
 	}
 
@@ -33,8 +36,33 @@ public class GameRegistryList<T> {
 		this.availableIndexes.clear();
 	}
 
+	public void clean() {
+		GameObject obj;
+
+		for (int i = 0; i < this.list.size(); i++) {
+			if(this.list.get(i) != null
+			&& this.list.get(i).isRemovedFromRegistry()) {
+				this.remove(i);
+			}
+		}
+	}
+
 	public void remove(int i) {
 		this.availableIndexes.add(i);
 		this.list.set(i, null);
+	}
+
+	public GameObject[] toArray() {
+		List<GameObject> objects = new ArrayList<GameObject>();
+
+		for (int i = 0; i < list.size(); i++) {
+			if(this.list.get(i) != null) {
+				objects.add(this.list.get(i));
+			}
+		}
+
+		return objects.toArray(
+			new GameObject[
+					objects.size()]);
 	}
 }

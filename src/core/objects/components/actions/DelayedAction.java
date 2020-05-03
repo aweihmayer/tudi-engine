@@ -16,17 +16,15 @@ public abstract class DelayedAction extends BaseAction implements DelayedActionE
 	public void update(UpdateEvent ev) {
 		super.update(ev);
 
-		if(this.isActive()) {
+		if (this.isActive()) {
 			this.updateActive();
-		} else {
-			this.whileInactive();
 		}
 
 		this.phases.update(ev);
 	}
 
 	protected void updateActive() {
-		if(this.phases.isCurrentPhaseDone()) {
+		if (this.phases.isCurrentPhaseDone()) {
 			if(this.phases.isOnLastPhase()) {
 				this.onFinish();
 			} else {

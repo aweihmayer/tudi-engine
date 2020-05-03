@@ -7,8 +7,6 @@ public interface DelayedActionEvents {
 
 	void whileActive();
 
-	void whileInactive();
-
 	void onPhaseChange();
 
 	void onFinish();

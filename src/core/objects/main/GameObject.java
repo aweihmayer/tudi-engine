@@ -3,49 +3,23 @@ package core.objects.main;
 import core.objects.BaseObject;
 import core.objects.components.BaseComponent;
 import core.objects.components.ComponentList;
+import core.objects.components.actions.ActionList;
+import core.objects.components.body.Body;
+import core.objects.components.movement.Movement;
 
-public class GameObject extends BaseObject {
-    protected int registryIndex = -1;
+public abstract class GameObject extends BaseObject {
+    protected int registryStatus = 0; // 0 not yet added, 1 added, -1 removed
 
-    protected int updateHandlerIndex;
-
-    protected int drawHandlerIndex;
-    protected int drawHandlerLayer;
-
-    protected int collisionHandlerIndex;
-    protected int collisionHandlerCheckStatus = 1;
-
+    public Body body;
+    public Movement movement;
+    public ActionList actions = new ActionList();
     public ComponentList<BaseComponent> components = new ComponentList<BaseComponent>();
 
 // Registry
 
-    public void setRegistryIndex(int i){ 		    this.registryIndex = i; 				    }
+    public void setRegistryStatus(int i){ 		    this.registryStatus = i; 				    }
 
-    public int getRegistryIndex(){ 					return this.registryIndex; 					}
+    public int getRegistryStatus(){ 				return this.registryStatus; 				}
 
-    public boolean isRemovedFromRegistry(){ 		return this.getRegistryIndex() == -2; 		}
-
-// Update
-
-    public void setUpdateHandlerIndex(int i) { 	    this.updateHandlerIndex = i;                }
-
-    public int getUpdateHandlerIndex() { 		    return this.updateHandlerIndex; 	        }
-
-// Draw
-
-    public void setDrawHandlerIndex(int i) { 	    this.drawHandlerIndex = i;                  }
-
-    public int getDrawHandlerIndex() { 			    return this.drawHandlerIndex; 	            }
-
-    public int getDrawHandlerLayer() {              return this.drawHandlerLayer;               }
-
-// Collision
-
-    public void setCollisionHandlerIndex(int i) {   this.collisionHandlerIndex = i;             }
-
-    public int getCollisionHandlerIndex() {         return this.collisionHandlerIndex; 	        }
-
-    public void setCollisionCheckStatus(int s) {	this.collisionHandlerCheckStatus = s; 	    }
-
-    public int getCollisionCheckStatus() {			return this.collisionHandlerCheckStatus;    }
+    public boolean isRemovedFromRegistry(){ 		return this.getRegistryStatus() == -1; 		}
 }

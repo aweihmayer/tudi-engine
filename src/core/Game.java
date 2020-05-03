@@ -18,7 +18,7 @@ public class Game {
 	public static CollisionHandler collisionHandler = 	new CollisionHandler();
 
 	public static void init() {
-		frameDuration = 1 / getFps();
+		frameDuration = 1 / getFPS();
 		timeSkip = (int) (frameDuration * 1000);
 
 		GameWindow.init();
@@ -28,15 +28,14 @@ public class Game {
 	public static void loop() {
 		if (isPlaying()) {
 			int loops = 0;
-			long nextGameTick = Time.addToNow(0);
+			Time nextGameTick = new Time();
 
 			// Update as many times as possible for a given interval
-			while (!Time.isLaterThanNow(nextGameTick) && loops < 5){
-
+			while (!nextGameTick.isLaterThanNow() && loops < 5){
 				updateHandler.handle();
 				collisionHandler.handle();
 
-				nextGameTick += timeSkip;
+				nextGameTick.add(timeSkip);
 				loops++;
 			}
 
@@ -69,11 +68,11 @@ public class Game {
 	
 // Configurations
 
-	public static void setFps(int fps) {
+	public static void setFPS(int fps) {
 		framesPerSecond = fps;
 	}
 
-	public static int getFps() {
+	public static int getFPS() {
 		return framesPerSecond;
 	}
 }

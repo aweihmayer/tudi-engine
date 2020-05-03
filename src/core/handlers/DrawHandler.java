@@ -4,56 +4,42 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 
-import core.registry.GameRegistryList;
-import core.registry.ObjectRegistry;
 import core.objects.BaseObject;
 import core.objects.Drawable;
 import core.objects.components.BaseComponent;
 import core.objects.components.ComponentList;
+import core.objects.components.body.Body;
+import core.objects.components.body.graphics.Graphic;
 import core.objects.main.GameObject;
 import core.ui.GameWindow;
 
-public class DrawHandler implements Handler {
-	private GameRegistryList<Integer>[] layers = (GameRegistryList<Integer>[]) new Object[] {
-		(GameRegistryList<Integer>) new Object(),
-		(GameRegistryList<Integer>) new Object(),
-		(GameRegistryList<Integer>) new Object(),
-		(GameRegistryList<Integer>) new Object() };
-
-	public void add(GameObject obj) {
-		int layer = obj.getDrawHandlerLayer();
-		int registryIndex = obj.getRegistryIndex();
-
-		int handlerIndex = this.layers[layer].add(registryIndex);
-		obj.setDrawHandlerIndex(handlerIndex);
-	}
-
-	public void clear() {
-		for (int l = 0; l < layers.length; l++) {
-			this.layers[l].clear();
-		}
-	}
-
-	public void remove(GameObject obj) {
-		int layer = obj.getDrawHandlerLayer();
-		this.layers[layer].remove(obj.getDrawHandlerIndex());
-	}
-
+public class DrawHandler extends BaseHandler {
 	public void handle() {
+		this.clean();
+		GameObject[] objects = this.ref.toArray();
+		GameObject obj;
+
 		BufferStrategy bufferStrategy = GameWindow.getCanvas().getBufferStrategy();
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		GameWindow.clearCanvas(g);
 
-		for (int l = 0; l < layers.length; l++) {
-			GameObject[] objects = ObjectRegistry.getWithReferenceList(this.layers[l]);
+		for (int i = 0; i < objects.length; i++) {
+			obj = objects[i];
 
-			for (int i = 0; i < objects.length; i++) {
-				this.draw(objects[i], g);
-				this.handleComponents(objects[i].components, g);
+			if (obj.body != null) {
+				obj.body.draw(g);
 			}
+
+			this.handleComponents(obj.components, g);
 		}
 
 		bufferStrategy.show();
+	}
+
+	public void add(GameObject obj) {
+		if (obj instanceof Drawable) {
+			super.add(obj);
+		}
 	}
 
 	private void handleComponents(BaseComponent obj, Graphics2D g) {
@@ -67,9 +53,9 @@ public class DrawHandler implements Handler {
 	}
 
 	private void draw(BaseObject obj, Graphics2D g) {
-		if (obj instanceof Drawable) {
+		if (obj instanceof Body) {
 			AffineTransform gRestorePoint = g.getTransform();
-			((Drawable) obj).draw(g);
+			((Body) obj).draw(g);
 			g.setTransform(gRestorePoint);
 		}
 	}

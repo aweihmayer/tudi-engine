@@ -19,3 +19,8 @@ to do so anyway
 Main objects will now be added/removed immediately instead of waiting for the start of the next update phase. There is no need to mark
 objects as removed anymore, but to make sure no references break, I will set the registry index as -2 to indicate that they were once
 in the registry, but then removed
+
+06-04-2020
+Shapes moved to math package. I don't see a problem with classes extending other classes in different packages
+Removed position property from shapes. A shape should only know what it is, not where it is positioned in relation
+to something else. That's why I created a body class that combines shapes and positioning.

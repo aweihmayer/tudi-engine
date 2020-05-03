@@ -1,6 +1,6 @@
 package core.ui;
 
-import core.events.InputListener;
+import core.listeners.InputListener;
 import math.Coord;
 
 import java.awt.Canvas;

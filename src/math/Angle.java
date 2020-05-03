@@ -14,6 +14,10 @@ public class Angle extends Number {
 	public Angle(double v) {
 		this.setValue(v);
 	}
+
+	public Angle clone() {
+		return new Angle(this.getValue());
+	}
 	
 // Value
 	
@@ -32,7 +36,7 @@ public class Angle extends Number {
 	}
 
 	public static Angle angleBetween(Coord c1, Coord c2) {
-		c2 = new Coord(c2);
+		c2 = c2.clone();
 		c2.sub(c1);
 		double a = Math.atan2(c2.getY(), c2.getX());
 		a = Math.toDegrees(a);
@@ -42,5 +46,9 @@ public class Angle extends Number {
 	    }
 		
 		return new Angle(a);
+	}
+
+	public static Angle angleTo(Coord c) {
+		return angleBetween(new Coord(0, 0), c);
 	}
 }

@@ -1,15 +1,15 @@
 package core.events;
 
-import core.objects.components.shape.hitboxes.Hitbox;
+import core.objects.components.body.Body;
 
 public class CollisionEvent {
-    private Hitbox object;
+    private Body body;
 
-    public CollisionEvent(Hitbox obj) {
-        this.object = obj;
+    public CollisionEvent(Body body) {
+        this.body = body;
     }
 
-    public Hitbox getObject() {
-        return this.object;
+    public Body getBody() {
+        return this.body;
     }
 }

@@ -1,7 +1,5 @@
 package core.handlers;
 
-import core.registry.GameRegistryList;
-import core.registry.ObjectRegistry;
 import core.objects.BaseObject;
 import core.objects.components.BaseComponent;
 import core.objects.components.ComponentList;
@@ -9,30 +7,35 @@ import core.objects.main.GameObject;
 import core.events.UpdateEvent;
 import core.objects.Updateable;
 
-public class UpdateHandler implements Handler {
-	private GameRegistryList<Integer> ref =	new GameRegistryList<Integer>();
+public class UpdateHandler extends BaseHandler {
 	private UpdateEvent lastUpdateEvent = new UpdateEvent();
 
-	public void add(GameObject obj) {
-		int i = this.ref.add(obj.getRegistryIndex());
-		obj.setUpdateHandlerIndex(i);
-	}
-
-	public void remove(GameObject obj) {
-		this.ref.remove(obj.getUpdateHandlerIndex());
-	}
-
-	public void clear() {
-		this.ref.clear();
-	}
-
 	public void handle() {
-		GameObject[] objects = ObjectRegistry.getWithReferenceList(this.ref);
+		this.clean();
+		GameObject[] objects = this.ref.toArray();
+		GameObject obj;
 		this.lastUpdateEvent = new UpdateEvent(this.lastUpdateEvent);
 
-		for(int i = 0; i < objects.length; i++) {
+		for (int i = 0; i < objects.length; i++) {
+			obj = objects[i];
 			this.update(objects[i]);
+
+			if (obj.body != null) {
+				obj.body.update(this.lastUpdateEvent);
+			}
+
+			if (obj.movement != null) {
+				obj.movement.update(this.lastUpdateEvent);
+			}
+
 			this.handleComponents(objects[i].components);
+			this.handleComponents(objects[i].actions);
+		}
+	}
+
+	public void add(GameObject obj) {
+		if (obj instanceof Updateable) {
+			super.add(obj);
 		}
 	}
 

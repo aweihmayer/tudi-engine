@@ -66,6 +66,26 @@ public class ComponentList<T extends BaseComponent> extends BaseComponent {
 		return component;
 	}
 
+	public <A> List<A> getComponents2(Class<A> cls, int depth) {
+		List<A> components = new ArrayList();
+		A obj;
+
+		for (T comp : this.components) {
+			if (cls.isInstance(comp)) {
+				obj = cls.cast(comp);
+				components.add(obj);
+
+				if (depth == 0) {
+					break;
+				}
+			} else if (comp instanceof ComponentList && depth == 2) {
+				components.addAll(((ComponentList<BaseComponent>) comp).getComponents2(cls, depth));
+			}
+		}
+
+		return components;
+	}
+
 // Has
 
 	public boolean hasComponent(Class<?> cls) {

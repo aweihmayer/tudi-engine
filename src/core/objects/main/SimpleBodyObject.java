@@ -1,20 +1,22 @@
 package core.objects.main;
 
-import core.objects.components.movement.SimpleMovement;
-import core.objects.components.shape.BaseShape;
+import core.objects.components.body.Body;
+import core.objects.components.body.graphics.Graphic;
+import core.objects.components.body.hitboxes.Hitbox;
 import math.Coord;
 
 public abstract class SimpleBodyObject extends GameObject {
-    public SimpleBodyObject(Coord position, BaseShape graphic, BaseShape hitbox, double speed) {
-        graphic.setPosition(position);
-        hitbox.setPosition(position);
+	public SimpleBodyObject(Coord position, Graphic graphic, Hitbox hitbox) {
+		Body body = new Body(position, graphic, hitbox);
+		this.components.addComponent(body);
+	}
 
-        this.components.addComponent(graphic);
-        this.components.addComponent(hitbox);
-        this.components.addComponent(new SimpleMovement(position, speed));
-    }
+	public SimpleBodyObject(Coord position, Body body) {
+		body.setPosition(position);
+		this.components.addComponent(body);
+	}
 
-    public SimpleBodyObject(Coord position, BaseShape graphic, BaseShape hitbox) {
-        this(position, graphic, hitbox, 0);
-    }
+	public SimpleBodyObject(Body body) {
+		this.components.addComponent(body);
+	}
 }

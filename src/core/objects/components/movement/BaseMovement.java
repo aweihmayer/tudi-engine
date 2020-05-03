@@ -3,48 +3,36 @@ package core.objects.components.movement;
 import core.objects.components.BaseComponent;
 import core.events.UpdateEvent;
 import core.objects.Updateable;
-import math.Vector;
-import math.Coord;
+import core.objects.components.body.Body;
+import math.physics.Force;
+import utility.Time;
 
-public class BaseMovement extends BaseComponent implements Updateable {
-	protected Coord position = new Coord();
-
-	protected Vector movement = new Vector();
+public abstract class BaseMovement extends BaseComponent implements Movement {
+	protected Body body;
+	protected Force force = new Force();
 
 	public BaseMovement() { }
 
-	public BaseMovement(Coord c) {
-		this.setPosition(c);
+	public BaseMovement(Body body) {
+		this.body = body;
+	}
+
+// Body
+
+	public void setBody(Body body) {
+		this.body = body;
+	}
+
+	public Body getBody() {
+		return this.body;
 	}
 
 // Events
 
 	public void update(UpdateEvent ev) {
-		this.applyMovement(ev);
-	}
+		Force force = this.force.clone();
+		force.setExpiration(new Time());
 
-	protected void applyMovement(UpdateEvent ev) {
-		Coord movement = this.movement.getHead();
-
-		movement.setX(
-			movement.getX() * ev.getFractionOfSecond());
-		movement.setY(
-			movement.getY() * ev.getFractionOfSecond());
-
-		this.getPosition().add(movement);
-	}
-
-// Position
-
-	public void setPosition(Coord c) {
-		this.position = c;
-	}
-
-	public Coord getPosition() {
-		return this.position;
-	}
-
-	public Coord getCurrentPosition() {
-		return new Coord(this.getPosition());
+		this.body.getForces().addForce(force);
 	}
 }

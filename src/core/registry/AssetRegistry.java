@@ -1,7 +1,7 @@
 package core.registry;
 
-import core.objects.components.shape.graphics.sprite.SpriteList;
-import core.objects.components.shape.graphics.sprite.SpriteSheet;
+import core.assets.sprite.SpriteList;
+import core.assets.sprite.SpriteSheet;
 
 public class AssetRegistry {
 	protected static SpriteList spriteSheets = new SpriteList();

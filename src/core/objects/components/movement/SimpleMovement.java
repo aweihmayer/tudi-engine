@@ -1,76 +1,46 @@
 package core.objects.components.movement;
 
-import math.Angle;
+import core.objects.components.body.Body;
 import math.Coord;
 
 public class SimpleMovement extends BaseMovement {
-	protected int movementState = 0;
-	protected double baseSpeed = 0;
+	protected double speed = 0;
 
 	public SimpleMovement() { }
 
-	public SimpleMovement(Coord c) {
-		super(c);
+	public SimpleMovement(double speed) {
+		this.setSpeed(speed);
 	}
 
-	public SimpleMovement(Coord c, double baseSpeed) {
-		super(c);
-		this.setBaseSpeed(baseSpeed);
+	public SimpleMovement(Body body, double speed) {
+		super(body);
+		this.setSpeed(speed);
 	}
 
 // Actions
 
 	public void start() {
-		this.movement.setMagnitude(this.getBaseSpeed());
-		this.setState(1);
+		this.force.setMagnitude(this.getSpeed());
 	}
 
 	public void stop() {
-		this.movement.setMagnitude(0);
-		this.setState(0);
+		this.force.setMagnitude(0);
 	}
 
-// Base speed
+// Speed
 	
-	public void setBaseSpeed(double baseSpeed) {
-		this.baseSpeed = baseSpeed;
+	public void setSpeed(double baseSpeed) {
+		this.speed = baseSpeed;
 	}
 	
-	public double getBaseSpeed() {
-		return this.baseSpeed;
+	public double getSpeed() {
+		return this.speed;
 	}
 
 // Direction
-	
-	public void setDirection(Angle a) {
-		this.movement.setDirection(a);
-	}
-	
-	public void setDirection(double a) {
-		this.movement.setDirection(a);
-	}
-	
-	public void setDirection(Coord c) {
-		c = new Coord(c);
-		c.sub(this.getPosition());
-		this.movement.setDirection(c);
-	}
 
-	public double getDirection() {
-		return this.movement.getDirection();
-	}
-	
-// State
-	
-	protected void setState(int st) {
-		this.movementState = st;
-	}
-	
-	protected int getState() {
-		return this.movementState;
-	}
-			
-	public boolean isMoving() {
-		return this.getState() != 0;
+	public void setDirection(Coord c) {
+		c.sub(this.getBody().getPosition());
+		this.force.setHead(c);
 	}
 }

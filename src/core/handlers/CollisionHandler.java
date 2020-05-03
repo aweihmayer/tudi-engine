@@ -1,108 +1,68 @@
-// TODO - New collision events
+// TODO - New collision events, tree map
 
 package core.handlers;
 
-import core.registry.GameRegistryList;
-import core.registry.ObjectRegistry;
 import core.objects.BaseObject;
 import core.objects.Collideable;
 import core.objects.components.BaseComponent;
-import core.objects.components.ComponentList;
-import core.objects.components.shape.hitboxes.CircleHitbox;
-import core.objects.components.shape.hitboxes.Hitbox;
-import core.objects.components.shape.hitboxes.RectangleHitbox;
+import core.objects.components.body.Body;
 import core.objects.main.GameObject;
 import core.events.CollisionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CollisionHandler implements Handler {
-	private GameRegistryList<Integer> ref =	new GameRegistryList<Integer>();
-	private int checkStatus = 1; // Alternates between 1 and -1
-
+public class CollisionHandler extends BaseHandler {
 	public void add(GameObject obj) {
-		int i = this.ref.add(obj.getRegistryIndex());
-		obj.setCollisionHandlerIndex(i);
-	}
-
-	public void remove(GameObject obj) {
-		this.ref.remove(obj.getCollisionHandlerIndex());
-	}
-
-	public void clear() {
-		this.ref.clear();
+		if (obj instanceof Collideable) {
+			super.add(obj);
+		}
 	}
 
 	public void handle() {
-		GameObject[] objects = ObjectRegistry.getWithReferenceList(this.ref);
+		this.clean();
+		GameObject[] objects = this.ref.toArray();
 
 		for (int i = 0; i < objects.length; i++) {
-			this.handle(objects[i], objects);
+			this.handle(
+				this.getBodies(objects));
 		}
-
-		this.checkStatus *= -1;
 	}
-	
-	public void handle(GameObject obj1, GameObject[] objects) {
-		List<Hitbox> hitboxes1 = this.extractHitboxes(obj1.components);
-		Hitbox hitbox1;
 
-		GameObject obj2;
-		List<Hitbox> hitboxes2;
-		Hitbox hitbox2;
-
-		boolean isCollisionDetected = false;
+	private List<Body> getBodies(GameObject[] objects) {
+		List<Body> bodies = new ArrayList<Body>();
 
 		for (int i = 0; i < objects.length; i++) {
-			obj2 = objects[i];
+			bodies.add(objects[i].body);
+		}
 
-			if (!this.wasHandled(obj2) && obj1 != obj2) {
-				hitboxes2 = this.extractHitboxes(obj2.components);
+		return bodies;
+	}
 
-				for (int y = 0; y < hitboxes1.size(); y++) {
-					for (int z = 0; z < hitboxes2.size(); z++) {
-						hitbox1 = hitboxes1.get(y);
-						hitbox2 = hitboxes2.get(z);
-
-						if (hitbox2 instanceof CircleHitbox) {
-							isCollisionDetected = hitbox1.checkCollision((CircleHitbox) hitbox2);
-						} else if (hitbox2 instanceof RectangleHitbox) {
-							isCollisionDetected = hitbox1.checkCollision((RectangleHitbox) hitbox2);
-						}
-
-						if (isCollisionDetected) {
-							this.dispatchEvent(
-								new CollisionEvent(hitbox2),
-								(BaseComponent) hitbox1);
-							this.dispatchEvent(
-								new CollisionEvent(hitbox1),
-								(BaseComponent) hitbox2);
-						}
-					}
-				}
+	public void handle(List<Body> bodies) {
+		for (int i = 0; i < bodies.size(); i++) {
+			for (int y = i + 1; y < bodies.size() - 1; y++) { // minus 1 i think for the end because the last one will already have been checked with all the others. The offset will be too long
+				this.checkCollision(bodies.get(i), bodies.get(y));
 			}
-
-			obj1.setCollisionCheckStatus(this.checkStatus);
 		}
 	}
 
-	protected List<Hitbox> extractHitboxes(BaseComponent obj) {
-		List<Hitbox> hitboxes = new ArrayList<Hitbox>();
+	public
 
-		if (obj instanceof ComponentList) {
-			for (BaseComponent comp : ((ComponentList<BaseComponent>) obj).getComponents()) {
-				hitboxes.addAll(this.extractHitboxes(comp));
-			}
-		} else if (obj instanceof Hitbox) {
-			hitboxes.add((Hitbox) obj);
+	private void checkCollision(Body body1, Body body2) {
+		if (body1.checkCollision(body2)) {
+			this.dispatchEvent(body1, body2);
 		}
-
-		return hitboxes;
 	}
-	
-	private boolean wasHandled(GameObject obj) {
-		return obj.getCollisionCheckStatus() == this.checkStatus;
+
+	private void dispatchEvent(Body body1, Body body2) {
+		this.dispatchEvent(
+			new CollisionEvent(body2),
+			body1);
+
+		this.dispatchEvent(
+			new CollisionEvent(body1),
+			body2);
 	}
 
 	private void dispatchEvent(CollisionEvent ev, BaseObject obj) {

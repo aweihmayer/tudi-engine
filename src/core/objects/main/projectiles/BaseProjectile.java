@@ -1,17 +1,22 @@
 package core.objects.main.projectiles;
 
-import core.objects.components.movement.SimpleMovement;
-import core.objects.main.SimpleBodyObject;
 import core.objects.Collideable;
 import core.objects.Drawable;
 import core.objects.Updateable;
-import core.objects.components.shape.BaseShape;
-import math.Coord;
+import core.objects.components.movement.BaseMovement;
+import core.objects.main.SimpleBodyObject;
 
 public abstract class BaseProjectile extends SimpleBodyObject implements Drawable, Updateable, Collideable {
-	public BaseProjectile(Coord position, BaseShape graphic, BaseShape hitbox, double speed) {
-		super(position, graphic, hitbox, speed);
-		SimpleMovement mv = (SimpleMovement) this.components.getComponent(SimpleMovement.class);
-		mv.start();
+	public BaseProjectile(BaseMovement movement) {
+		super(movement.getBody());
+
+		this.movement = movement;
+	}
+
+	public BaseProjectile clone() {
+		BaseProjectile clone = (BaseProjectile) super.clone();
+		clone.movement = this.movement;
+
+		return clone;
 	}
 }

@@ -25,17 +25,8 @@ public class PhaseList implements Updateable {
 		}
 	}
 
-	public boolean isCurrentPhaseDone() {
-		return (this.isActive() && this.cooldown.isReady());
-	}
-
-	private void goToNextPhase() {
-		this.currentPhase++;
-		this.startTime();
-	}
-
-	private void reset() {
-		this.setCurrentPhase(-1);
+	public PhaseList clone() {
+		return new PhaseList(this.phaseDurations.clone());
 	}
 
 // Actions
@@ -50,6 +41,19 @@ public class PhaseList implements Updateable {
 	}
 
 // Phases
+
+	public boolean isCurrentPhaseDone() {
+		return (this.isActive() && this.cooldown.isReady());
+	}
+
+	private void goToNextPhase() {
+		this.currentPhase++;
+		this.startTime();
+	}
+
+	private void reset() {
+		this.setCurrentPhase(-1);
+	}
 
 	public void setPhaseDurations(long[] durations) {
 		this.phaseDurations = durations;

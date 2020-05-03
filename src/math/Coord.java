@@ -5,22 +5,35 @@ public class Coord {
 	protected double y = 0;
 
 	public Coord() { }
-	
+
 	public Coord(double x, double y) {
 		this.setX(x);
 		this.setY(y);
 	}
-	
-	public Coord(Coord c) {
-		this(c.getX(), c.getY());
+
+	public Coord(Angle a, double length) {
+		this();
+
+		Double v = a.getValueInRadians();
+		this.setX(Math.cos(v) * length);
+		this.setY(Math.sin(v) * length);
+	}
+
+	public Coord clone() {
+		return new Coord(this.getX(), this.getY());
 	}
 	
 // Position
-	
+
+	public void set(double x, double y) {
+		this.setX(x);
+		this.setY(y);
+	}
+
 	public void setX(double x) {
 		this.x = x;
 	}
-	
+
 	public double getX() {
 		return this.x;
 	}
@@ -28,7 +41,7 @@ public class Coord {
 	public void setY(double y) {
 		this.y = y;
 	}
-	
+
 	public double getY() {
 		return this.y;
 	}
@@ -44,11 +57,23 @@ public class Coord {
 	}
 	
 	public double distanceFrom(Coord c) {
-		c = new Coord(c);
+		c = c.clone();
 		c.sub(this);
 		double x = c.getX();
 		double y = c.getY();
 		
 		return Math.sqrt((x * x) + (y * y));
+	}
+
+// Transform
+
+	public void rotateTo() {
+
+	}
+
+	public void rotateBy() {
+		/*x′=xcosθ−ysinθ
+		y′=ycosθ+xsinθ
+		Where θ is the angle of rotation*/
 	}
 }

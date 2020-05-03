@@ -17,29 +17,24 @@ public class ScalableNumber extends Number {
 		this.setScale(scale);
 	}
 
-// Value
-
-	protected void refreshValue() {
-		double value = this.getBaseValue() * this.getScale();
-		this.setValue(value);
+	public ScalableNumber clone() {
+		return new ScalableNumber(this.getBaseValue(), this.getScale());
 	}
 
 // Base value
 	
 	public void setBaseValue(double baseValue) {
 		this.baseValue = baseValue;
-		this.refreshValue();
 	}
 	
 	public double getBaseValue() {
-		return this.baseValue;
+		return this.getValue() * this.getScale();
 	}
 	
 // Scale
 	
 	public void setScale(double scale) {
 		this.scale = scale;
-		this.refreshValue();
 	}
 	
 	public double getScale() {

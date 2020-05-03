@@ -5,8 +5,10 @@ import core.objects.Updateable;
 import core.events.UpdateEvent;
 import utility.Cooldown;
 
-public abstract class BaseAction extends BaseComponent implements ActionEvents, Updateable {
+public abstract class BaseAction extends BaseComponent implements Action {
 	protected Cooldown cooldown = new Cooldown();
+
+	public BaseAction() { }
 
 	public BaseAction(long cdDuration) {
 		this.cooldown.setDuration(cdDuration);

@@ -1,15 +1,57 @@
 package utility;
 
 public class Time {
-	public static long now(){ 						return System.currentTimeMillis(); 	}
-	
-	public static boolean isLaterThanNow(long t){ 	return t > now(); 					}
-	
-	public static boolean isLaterThanNow(int t){ 	return (long)t > now(); 			}
-	
-	public static long addToNow(long t){ 			return now() + t; 					}
-	
-	public static long addToNow(int t){ 			return now() + (long)t; 			}
-	
-	public static long diffFromNow(long t){ 		return now() - t; 					}
+	public long time = 0;
+
+	public Time() {
+		this.setTimeToNow();
+	}
+
+	public Time(long offset) {
+		this.setTimeToNow(offset);
+	}
+
+	public Time clone() {
+		Time time = new Time();
+		time.setTime(this.getTime());
+		return time;
+	}
+
+// Time
+
+	public void setTime(long time) {
+		this.time = time;
+	}
+
+	public void setTimeToNow() {
+		this.time = now();
+	}
+
+	public void setTimeToNow(long offset) {
+		this.setTime(this.getTime() + offset);
+	}
+
+	public long getTime() {
+		return this.time;
+	}
+
+	public boolean isLaterThanNow() {
+		return this.getTime() > now();
+	}
+
+	public void add(long time) {
+		this.setTime(this.getTime() + time);
+	}
+
+	public long diffFromNow(){
+		return now() - this.getTime();
+	}
+
+	public long diff(long time) {
+		return this.getTime() - time;
+	}
+
+	public static long now(){
+		return System.currentTimeMillis();
+	}
 }

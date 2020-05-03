@@ -1,7 +1,6 @@
 package core.objects.components;
 
 import core.objects.BaseObject;
-import core.objects.components.shape.Circle;
 
 public abstract class BaseComponent extends BaseObject {
 	protected BaseObject parent;
