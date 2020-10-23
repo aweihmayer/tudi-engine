@@ -1,40 +1,32 @@
 package math.geometry;
 
 import math.ScalableNumber;
-import math.geometry.OneDimensionalShape;
 
 public abstract class TwoDimensionalShape extends OneDimensionalShape {
 	protected ScalableNumber height = new ScalableNumber(1);
 
 	public TwoDimensionalShape(double sz) {
 		super(sz);
-		this.setBaseHeight(sz);
+		this.setHeight(sz);
 	}
 
 	public TwoDimensionalShape(double w, double h) {
 		super(w);
-		this.setBaseHeight(h);
+		this.setHeight(h);
 	}
 
 // Dimensions
 
+	public double getScaledHeight() {
+		return this.height.getScaledValue();
+	}
+
 	public void setHeight(double h) {
-		this.setBaseHeight(h);
-		this.setWidthScale(1);
+		this.height.setValue(h);
 	}
 
 	public double getHeight() {
 		return this.height.getValue();
-	}
-
-// Base dimensions
-
-	public void setBaseHeight(double h) {
-		this.height.setBaseValue(h);
-	}
-
-	public double getBaseHeight() {
-		return this.height.getBaseValue();
 	}
 
 // Scale

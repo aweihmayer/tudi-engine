@@ -1,7 +1,7 @@
 package utility;
 
-import core.objects.Updateable;
-import core.events.UpdateEvent;
+import gameObjects.Updateable;
+import handlers.events.UpdateEvent;
 
 // TODO - Implement pause
 public class PhaseList implements Updateable {

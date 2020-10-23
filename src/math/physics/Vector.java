@@ -1,5 +1,6 @@
 package math.physics;
 
+import math.Angle;
 import math.Coord;
 import math.geometry.Triangle;
 
@@ -64,6 +65,10 @@ public class Vector {
 	}
 
 // Transform
+
+	public void rotateTo(Angle a) {
+		this.head.rotateTo(a);
+	}
 
 	public void scale(double scale) {
 		Coord head = this.getHead();

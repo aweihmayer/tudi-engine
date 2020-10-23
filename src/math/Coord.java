@@ -67,8 +67,12 @@ public class Coord {
 
 // Transform
 
-	public void rotateTo() {
+	public void rotateTo(Angle angle) {
+		double rad = angle.getValueInRadians();
 
+		this.set(
+			this.getX() * Math.cos(rad) - y * Math.sin(rad),
+			this.getY() * Math.cos(rad) + x * Math.sin(rad));
 	}
 
 	public void rotateBy() {

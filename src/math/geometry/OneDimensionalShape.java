@@ -8,26 +8,21 @@ public abstract class OneDimensionalShape {
 	public OneDimensionalShape() { }
 
 	public OneDimensionalShape(double w) {
-		this.setBaseWidth(w);
+		this.setWidth(w);
 	}
 
 // Dimension
 
-	public void setWidth(double w) {
-		this.setBaseWidth(w);
-		this.setWidthScale(1);
+	public double getScaledWidth() {
+		return this.width.getScaledValue();
 	}
 
-	public void setBaseWidth(double w) {
-		this.width.setBaseValue(w);
+	public void setWidth(double w) {
+		this.width.setValue(w);
 	}
 
 	public double getWidth() {
 		return this.width.getValue();
-	}
-
-	public double getBaseWidth() {
-		return this.width.getBaseValue();
 	}
 
 // Scale

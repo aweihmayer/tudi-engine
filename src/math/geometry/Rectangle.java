@@ -1,6 +1,6 @@
 package math.geometry;
 
-import core.objects.components.body.hitboxes.RectangleHitbox;
+import gameObjects.components.body.hitboxes.RectangleHitbox;
 
 public class Rectangle extends TwoDimensionalShape {
 	public Rectangle() {
